@@ -1,0 +1,5 @@
+.vscode/
+build/
+main.py
+test_result
+db_file
