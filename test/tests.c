@@ -28,9 +28,9 @@ int test_add(struct database* db,
             
             node_id++;
             time[i / frequency_of_verification] = ((double)(t2 - t1) / CLOCKS_PER_SEC) * 1000;
-
             fseek(db->file, 0, SEEK_END);
             file_size[i / frequency_of_verification] =  ftell(db->file);
+
         } else {
             create_node(db, generate_node(node_id, node_type, string));
             node_id++;
@@ -54,10 +54,6 @@ int test_delete(struct database* db,
     uint64_t nodes_num[k];
     uint64_t time[k];
 
-    clock_t t1;
-    clock_t t2;
-
-
     char* string = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     struct node_type node_type = generate_node_type(0);
     create_node_type(db, node_type);
@@ -70,9 +66,9 @@ int test_delete(struct database* db,
         if (i % frequency_of_verification == 0) {
             nodes_num[i / frequency_of_verification] = i + 1;
 
-            t1 = clock();
+            clock_t t1 = clock();
             delete_node_by_id(db, i);
-            t2 = clock();
+            clock_t t2 = clock();
             time[i / frequency_of_verification] = ((double)(t2 - t1) / CLOCKS_PER_SEC) * 1000;
 
         } else {
@@ -131,9 +127,6 @@ int test_match(struct database* db,
     uint64_t nodes_num[k];
     uint64_t time[k];
 
-    clock_t t1;
-    clock_t t2;
-
     char* string = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
     for (int i = 0; i < count; i++) {
@@ -145,9 +138,9 @@ int test_match(struct database* db,
     for (int i = 0; i < count; i++) {
 
         if (i % frequency_of_verification == 0) {
-            t1 = clock();
+            clock_t t1 = clock();
             match_node_by_id(db, node_type, i, &node);
-            t2 = clock();
+            clock_t t2 = clock();
 
             time[i / frequency_of_verification] = ((double)(t2 - t1) / CLOCKS_PER_SEC) * 1000;
             nodes_num[i / frequency_of_verification] = i + 1;
@@ -221,6 +214,7 @@ int test_update(struct database* db,
     return 0;
 }
 
+
 int run_tests(char* db_file_path, char* tests_res_file_path) {
     struct database db;
 
@@ -234,18 +228,18 @@ int run_tests(char* db_file_path, char* tests_res_file_path) {
         return 1;
     } 
 
-    // test_add(&db, tests_res_file, 10000, 100);
+    test_add(&db, tests_res_file, 10000, 100);
 
     // test_delete(&db, tests_res_file, 800, 10);
 
-    struct node_type node_type = generate_node_type(0);
-    create_node_type(&db, node_type);
+    // struct node_type node_type = generate_node_type(0);
+    // create_node_type(&db, node_type);
 
     // test_add_and_delete(&db, node_type, tests_res_file, 500, 400, 4);
 
     // test_match(&db, tests_res_file, node_type, 800, 10);
     
-    test_update(&db, tests_res_file, 800, 10);
+    // test_update(&db, tests_res_file, 800, 10);
 
     destroy_db(&db);
     fclose(tests_res_file);

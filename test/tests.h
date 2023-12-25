@@ -10,10 +10,6 @@
 #include "generator.h"
 #include "../include/query.h"
 
-
-#define TEST_RESULT_PATH "C:\\Users\\eva\\VScode\\llp_lab1\\test_result"
-
-
-int run_tests();
+int run_tests(char* db_file_path, char* tests_res_file_path);
 
 #endif

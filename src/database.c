@@ -16,12 +16,11 @@ int destroy_db(struct database* db) {
     fclose(db->file);
 
     struct free_space* fs = db->first_free_space;
-    struct free_space* next_fs = fs->next_free_space;
 
     while (fs != NULL) {
+        struct free_space* next_fs = fs->next_free_space;
         free(fs);
         fs = next_fs;
-        next_fs = fs->next_free_space;
     }
         
     return 0;
@@ -305,8 +304,11 @@ void fill_node_blocks(const struct node node, uint64_t data_size, size_t blocks_
         size_t filled_bytes_num = 0;
 
         while (attr_num < node.type.attribute_num && filled_bytes_num < block_data_size) {
+
             if (written_attr_size == 0) {
+
                 switch (node.type.attribute_types[attr_num]) {
+                    
                     case STRING:
                         attr_ptr = (uint8_t *) node.attributes[attr_num].value.as_string;
                         cur_attr_size = strlen(node.attributes[attr_num].value.as_string) + 1;
